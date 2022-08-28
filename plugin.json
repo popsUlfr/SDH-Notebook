@@ -3,7 +3,7 @@
   "author": "popsUlfr",
   "flags": [],
   "publish": {
-    "tags": ["notes", "drawings", "notebook"],
+    "tags": ["notes", "drawings", "notebook", "draw", "scribble", "write"],
     "description": "Quickly scribble down important codes or notes during your play sessions.",
     "image": ""
   }

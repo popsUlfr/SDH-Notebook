@@ -2,7 +2,7 @@
 export const MaxPages: number = 8;
 
 // throttle wait of FocusChangeEvents
-export const FocusChangeEventWait: number = 1000;
+export const FocusChangeEventWait: number = 500;
 
 // debounce delay of DropdownChangeEvents
 export const DropdownChangeEventWait: number = 500;
@@ -14,7 +14,7 @@ export const DeleteButtonClickWait: number = 250;
 export const TapToConfirmTimeout: number = 4000;
 
 // debounce delays between stroke actions
-export const CanvasSaveWait: number = 2000;
+export const CanvasSaveWait: number = 1000;
 
 // width of the canvas pen stroke
 export const CanvasStrokeWidth: number = 4;

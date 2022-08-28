@@ -16,7 +16,12 @@
     "plugin",
     "steam-deck",
     "deck",
-    "notes"
+    "notes",
+    "notebook",
+    "drawings",
+    "draw",
+    "scribble",
+    "write"
   ],
   "author": "Philipp Richter <richterphilipp.pops@gmail.com>",
   "license": "GPL-2.0-or-later",

@@ -122,13 +122,9 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
     const oPages = [...pages];
     oPages.forEach((o) => {
       const p = bPages.find((p) => p.page === o.data);
-      if (!p) {
-        o.label = <PageLabel page={o.data} timestamp={0} />;
-        return;
-      } else {
-        o.label = <PageLabel page={o.data} timestamp={(p.empty) ? 0 : p.timestamp} />;
-      }
+      o.label = <PageLabel page={o.data} timestamp={(!p?.empty && p?.timestamp) ? p.timestamp : 0} />;
     });
+    // the pages are sorted by descending modification time and then by ascending page index
     oPages.sort((a, b) => {
       const pA = bPages.find((p) => p.page === a.data);
       const pB = bPages.find((p) => p.page === b.data);
@@ -144,6 +140,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
     const canvasPaths = await loadPage(appid, lastSelectedPage);
     sketchCanvasRef?.loadPaths(canvasPaths);
   }, (f) => {
+    // wrap with disabled state
     setDisableState(true);
     return f().finally(() => setDisableState(false));
   });
@@ -152,13 +149,13 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
   const sketchCanvasRefCallback = async (ref: ReactSketchCanvasRef) => {
     if (!ref) return;
     sketchCanvasRef = ref;
-    sketchCanvasRef?.eraseMode(eraserMode);
+    sketchCanvasRef.eraseMode(eraserMode);
   };
 
   useEffect(() => {
     let runningAppPid: number = 0;
     const {unregister} = SteamClient.System.UI.RegisterForFocusChangeEvents(throttle(async (fce: FocusChangeEventObject) => {
-      if (runningAppPid === fce.focusedApp?.pid || fce.focusedApp?.appid === Number(Router.MainRunningApp?.appid)) {
+      if (runningAppPid === fce.focusedApp?.pid || fce.focusedApp?.appid === Number(runningApp?.appid || 0)) {
         return;
       }
       runningAppPid = fce.focusedApp?.pid;
@@ -179,6 +176,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
     const canvasPaths = await loadPage(appid, page);
     sketchCanvasRef?.loadPaths(canvasPaths);
   }, (f, d: SingleDropdownOption) => {
+    // wrap with disabled state
     setDisableState(true);
     return f(d).finally(() => setDisableState(false));
   }), config.DropdownChangeEventWait);
@@ -193,18 +191,22 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
       await deletePage(appid, page);
       const p = pages.find((p) => p.data === page);
       if (p) {
+        // set the page dropdown option label back to empty
         p.label = <PageLabel page={page} timestamp={0} />
-        setPages([...pages]);
+        setPages([...pages]); // supply a shallow copy to force a refresh
       }
     } else {
+      // shows the confirm prompt for a limited amount of time
       deleteStateTimer = setTimeout(() => setDeleteState(false), config.TapToConfirmTimeout);
     }
     setDeleteState(!deleteState);
   }, (f, e: MouseEvent) => {
+    // wrap with disabled state
     setDisableState(true);
     return f(e).finally(() => setDisableState(false));
   }), config.DeleteButtonClickWait);
 
+  // debounced canvas stroke saves the scribble on-the-fly to disk
   const handleCanvasStroke = debounce(async (_path: CanvasPath, _isEraser: boolean) => {
     const appid = Number(Router.MainRunningApp?.appid || 0);
     const page = selectedPage;
@@ -212,8 +214,9 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
     const timestamp = await savePage(appid, page, canvasPaths || []);
     const p = pages.find((p) => p.data === page);
     if (p) {
+      // set the dropdown option label with the timestamp
       p.label = <PageLabel page={page} timestamp={timestamp} />
-      setPages([...pages]);
+      setPages([...pages]); // supply a shallow copy to force a refresh
     }
   }, config.CanvasSaveWait);
 

@@ -2,6 +2,16 @@ import os
 
 NOTES_SAVE_DIR = "/home/deck/homebrew/notebook"
 
+"""
+Under the NOTES_SAVE_DIR, notebook pages will be stored under the games' appids.
+Each page stored as json encoded CanvasPath[] named by their ids (e.g.: '0.json')
+
+Additonally each game has a 'page' file storing the last selected page index.
+
+The timestamp attribute is the file's modification time multiplied by 1000 so that it's
+already in the format that javascript 'Date()' expects.
+"""
+
 class Plugin:
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
