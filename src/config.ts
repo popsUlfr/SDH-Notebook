@@ -21,3 +21,9 @@ export const CanvasStrokeWidth: number = 4;
 
 // width of the canvas eraser
 export const CanvasEraserWidth: number = 16;
+
+// color of the pen
+export const CanvasStrokeColor: string = "white";
+
+// background color of the canvas
+export const CanvasBackgroundColor: string = "transparent";

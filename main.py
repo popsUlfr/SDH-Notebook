@@ -27,6 +27,8 @@ class Plugin:
                 ret['empty'] = len(ret['data']) == 0
         except FileNotFoundError as err:
             pass
+        except:
+            pass
         return ret
 
     async def savePage(self, appid: int, page: int, data: str) -> {'timestamp': int}:
@@ -40,6 +42,8 @@ class Plugin:
             ret['timestamp'] = int(os.path.getmtime(pagePath)*1000)
         except OSError as err:
             pass
+        except:
+            pass
         return ret
 
     async def deletePage(self, appid: int, page: int) -> bool:
@@ -48,6 +52,8 @@ class Plugin:
             os.unlink(pagePath)
         except FileNotFoundError as err:
             return False
+        except:
+            pass
         return True
 
     async def saveLastSelectedPage(self, appid: int, page: int) -> bool:
@@ -59,6 +65,8 @@ class Plugin:
                 f.write(str(page))
         except OSError as err:
             return False
+        except:
+            pass
         return True
 
     async def loadLastSelectedPage(self, appid: int) -> int:
@@ -69,6 +77,8 @@ class Plugin:
         except FileNotFoundError as err:
             pass
         except ValueError as err:
+            pass
+        except:
             pass
         return 0
 
@@ -90,5 +100,7 @@ class Plugin:
         except OSError as err:
             pass
         except ValueError as err:
+            pass
+        except:
             pass
         return pages
