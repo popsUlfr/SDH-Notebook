@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/popsUlfr/SDH-Notes.git"
+    "url": "git+https://github.com/popsUlfr/SDH-Notebook.git"
   },
   "keywords": [
     "decky",
@@ -26,9 +26,9 @@
   "author": "Philipp Richter <richterphilipp.pops@gmail.com>",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/popsUlfr/SDH-Notes/issues"
+    "url": "https://github.com/popsUlfr/SDH-Notebook/issues"
   },
-  "homepage": "https://github.com/popsUlfr/SDH-Notes#readme",
+  "homepage": "https://github.com/popsUlfr/SDH-Notebook#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.1.0",
     "@rollup/plugin-json": "^4.1.0",
