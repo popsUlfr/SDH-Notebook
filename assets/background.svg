@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="21cm" height="29.7cm" version="1.1"
+     viewBox="0 0 21 29.7"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <title> Papier à points </title>
+  <desc> Page blanche avec des points formant un quadrillage de 1 cm </desc>
+
+  <g id="fond">
+    <rect
+      x="0" y="0" width="21" height="29.7"
+      rx="0" ry="0"
+      fill="transparent"
+    />
+  </g>
+
+  <g id="symbole">
+    <rect
+      x="19" y="28" width="1" height="1"
+      rx="0" ry="0"
+      stroke="slategrey" fill="none" stroke-width="0.0199"
+    />
+  </g>
+
+
+  <g id="ligne16">
+    <g id="ligne8">
+      <g id="ligne4">
+        <g id="ligne2">
+          <g id="ligne1">
+            <g id="cercle16">
+              <g id="cercle8">
+                <g id="cercle4">
+                  <g id="cercle2">
+                    <circle id="cercle1"
+                      cx="1" cy="1" r="0.0199"
+                      stroke="none" fill="slategrey"
+                    />
+                    <use xlink:href="#cercle1" transform="translate(1)" />
+                  </g>
+                  <use xlink:href="#cercle2" transform="translate(2)" />
+                </g>
+                <use xlink:href="#cercle4" transform="translate(4)" />
+              </g>
+              <use xlink:href="#cercle8" transform="translate(8)" />
+            </g>
+            <use xlink:href="#cercle4" transform="translate(16)" />
+          </g>
+          <use xlink:href="#ligne1" transform="translate(0, 1)" />
+        </g>
+        <use xlink:href="#ligne2" transform="translate(0, 2)" />
+      </g>
+      <use xlink:href="#ligne4" transform="translate(0, 4)" />
+    </g>
+    <use xlink:href="#ligne8" transform="translate(0, 8)" />
+  </g>
+  <use xlink:href="#ligne8" transform="translate(0, 16)" /> <!-- 24 lignes -->
+  <use xlink:href="#ligne4" transform="translate(0, 24)" /> <!-- 28 lignes -->
+  <use xlink:href="#ligne1" transform="translate(0, 28)" /> <!-- 29 lignes -->
+</svg>

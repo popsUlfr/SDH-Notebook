@@ -1,0 +1,10 @@
+{
+  "name": "Notebook",
+  "author": "popsUlfr",
+  "flags": [],
+  "publish": {
+    "tags": ["notes", "drawings", "notebook"],
+    "description": "Quickly scribble down important codes or notes during your play sessions.",
+    "image": ""
+  }
+}
