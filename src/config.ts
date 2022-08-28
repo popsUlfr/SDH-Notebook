@@ -1,6 +1,9 @@
 // maximum amount of pages to list
 export const MaxPages: number = 8;
 
+// debounce delay of refreshes
+export const RefreshWait: number = 500;
+
 // throttle wait of FocusChangeEvents
 export const FocusChangeEventWait: number = 500;
 

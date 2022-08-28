@@ -112,7 +112,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
   ): Promise<CanvasPath[]> => {
     let p: backend.Page;
     try {
-      p = await backend.loadPage(appid, page);
+      p = await backend.loadPageServer(appid, page);
     } catch (e) {
       toastError(e);
       return [];
@@ -134,7 +134,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
   ): Promise<number> => {
     const jsonData = data.length > 0 ? JSON.stringify(data) : "";
     try {
-      return (await backend.savePage(appid, page, jsonData)).timestamp;
+      return (await backend.savePageServer(appid, page, jsonData)).timestamp;
     } catch (e) {
       toastError(e);
       return 0;
@@ -180,7 +180,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
     }
   };
 
-  const refresh = wrap(
+  const refresh = debounce(wrap(
     async () => {
       setRunningApp(Router.MainRunningApp);
       const appid = Number(Router.MainRunningApp?.appid || 0);
@@ -217,7 +217,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
       setDisableState(true);
       return f().finally(() => setDisableState(false));
     }
-  );
+  ), config.RefreshWait);
 
   // called when the ref is ready
   const sketchCanvasRefCallback = async (ref: ReactSketchCanvasRef) => {

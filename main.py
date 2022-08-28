@@ -1,4 +1,6 @@
 import os
+import asyncio
+from aiohttp import web
 
 NOTES_SAVE_DIR = "/home/deck/homebrew/notebook"
 
@@ -15,7 +17,30 @@ already in the format that javascript 'Date()' expects.
 class Plugin:
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
-        pass
+        async def pagehandler(request: web.BaseRequest):
+            corsHeaders = {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods': '*'}
+            if request.method == "OPTIONS":
+                return web.Response(headers=corsHeaders)
+            if request.method == "POST":
+                decReq = await request.json()
+                if 'appid' in decReq and 'page' in decReq and 'data' in decReq:
+                    ret = await self.savePage(self, appid=int(decReq['appid']), page=int(decReq['page']), data=decReq['data'])
+                    return web.json_response(ret, headers=corsHeaders)
+            elif request.method == "GET":
+                if 'appid' in request.query and 'page' in request.query:
+                    ret = await self.loadPage(self, appid=int(request.query['appid']), page=int(request.query['page']))
+                    return web.json_response(ret, headers=corsHeaders)
+            raise web.HTTPBadRequest(headers=corsHeaders)
+        server = web.Server(pagehandler)
+        runner = web.ServerRunner(server, handle_signals=True)
+        await runner.setup()
+        self._site = web.TCPSite(runner, host="localhost", port=0, reuse_port=True)
+        await self._site.start()
+        while True:
+            await asyncio.sleep(3600)
+
+    async def serverPageUrl(self) -> str:
+        return 'http://%s:%s' % self._site._server.sockets[0].getsockname()
 
     async def loadPage(self, appid: int, page: int) -> {'page': int, 'timestamp': int, 'empty': bool, 'data': str}:
         pagePath = f"{NOTES_SAVE_DIR}/{appid}/{page}.json"
