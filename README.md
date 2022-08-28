@@ -4,13 +4,24 @@ A Steam Deck plugin for the [Decky Plugin Loader](https://github.com/SteamDeckHo
 
 Nothing beats the real life notebook and pencil to feel like a genuine detective but just in case you forgot yours at home, this may be the next best convenient option.
 
+![](assets/20220828124121_1.jpg)
+
 The plugin stores a notebook per application with 8 pages by default, it will open the right one depending on the currently focused application. A default "Steam" notebook is also available when no application is running.
 
 From the dropdown menu, the pages are sorted by most recent and the relative modification time is displayed.
 
 Clearing/Removing a notebook page requires a second tap to confirm the deletion during a time window of 4 seconds by default to hopefully save yourself from misclicks.
 
+![](assets/20220828124127_1_crop.jpg)
+
 **Hint:** you may need to be slightly slower and more deliberate when making your strokes for them to register properly. Definitely something to check if it can be enhanced.
+
+## Build
+
+```sh
+pnpm i
+pnpm run build
+```
 
 ## Future considerations
 
