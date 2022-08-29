@@ -112,7 +112,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
   ): Promise<CanvasPath[]> => {
     let p: backend.Page;
     try {
-      p = await backend.loadPageServer(appid, page);
+      p = await backend.loadPage(appid, page);
     } catch (e) {
       toastError(e);
       return [];
@@ -134,7 +134,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
   ): Promise<number> => {
     const jsonData = data.length > 0 ? JSON.stringify(data) : "";
     try {
-      return (await backend.savePageServer(appid, page, jsonData)).timestamp;
+      return (await backend.savePage(appid, page, jsonData)).timestamp;
     } catch (e) {
       toastError(e);
       return 0;
@@ -180,44 +180,47 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
     }
   };
 
-  const refresh = debounce(wrap(
-    async () => {
-      setRunningApp(Router.MainRunningApp);
-      const appid = Number(Router.MainRunningApp?.appid || 0);
-      const bPages = await listPages(appid);
-      const lastSelectedPage = await loadLastSelectedPage(appid);
-      const oPages = [...pages];
-      oPages.forEach((o) => {
-        const p = bPages.find((p) => p.page === o.data);
-        o.label = (
-          <PageLabel
-            page={o.data}
-            timestamp={!p?.empty && p?.timestamp ? p.timestamp : 0}
-          />
-        );
-      });
-      // the pages are sorted by descending modification time and then by ascending page index
-      oPages.sort((a, b) => {
-        const pA = bPages.find((p) => p.page === a.data);
-        const pB = bPages.find((p) => p.page === b.data);
-        const v = (pB?.timestamp || 0) - (pA?.timestamp || 0);
-        if (v === 0) {
-          return a.data - b.data;
-        }
-        return v;
-      });
-      setPages(oPages);
-      setSelectedPage(lastSelectedPage);
-      sketchCanvasRef?.resetCanvas();
-      const canvasPaths = await loadPage(appid, lastSelectedPage);
-      sketchCanvasRef?.loadPaths(canvasPaths);
-    },
-    (f) => {
-      // wrap with disabled state
-      setDisableState(true);
-      return f().finally(() => setDisableState(false));
-    }
-  ), config.RefreshWait);
+  const refresh = debounce(
+    wrap(
+      async () => {
+        setRunningApp(Router.MainRunningApp);
+        const appid = Number(Router.MainRunningApp?.appid || 0);
+        const bPages = await listPages(appid);
+        const lastSelectedPage = await loadLastSelectedPage(appid);
+        const oPages = [...pages];
+        oPages.forEach((o) => {
+          const p = bPages.find((p) => p.page === o.data);
+          o.label = (
+            <PageLabel
+              page={o.data}
+              timestamp={!p?.empty && p?.timestamp ? p.timestamp : 0}
+            />
+          );
+        });
+        // the pages are sorted by descending modification time and then by ascending page index
+        oPages.sort((a, b) => {
+          const pA = bPages.find((p) => p.page === a.data);
+          const pB = bPages.find((p) => p.page === b.data);
+          const v = (pB?.timestamp || 0) - (pA?.timestamp || 0);
+          if (v === 0) {
+            return a.data - b.data;
+          }
+          return v;
+        });
+        setPages(oPages);
+        setSelectedPage(lastSelectedPage);
+        sketchCanvasRef?.resetCanvas();
+        const canvasPaths = await loadPage(appid, lastSelectedPage);
+        sketchCanvasRef?.loadPaths(canvasPaths);
+      },
+      (f) => {
+        // wrap with disabled state
+        setDisableState(true);
+        return f().finally(() => setDisableState(false));
+      }
+    ),
+    config.RefreshWait
+  );
 
   // called when the ref is ready
   const sketchCanvasRefCallback = async (ref: ReactSketchCanvasRef) => {
