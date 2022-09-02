@@ -3,7 +3,7 @@ import {
   PanelSection,
   ServerAPI,
   staticClasses,
-  Button,
+  DialogButton,
   Router,
   Dropdown,
   PanelSectionRow,
@@ -330,7 +330,18 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
         backgroundPosition: "center",
       }}
     >
-      <PanelSection title={runningApp?.display_name || "Steam"}>
+      <PanelSection>
+        <div
+          className={staticClasses.PanelSectionTitle}
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            display: "block",
+          }}
+        >
+          {runningApp?.display_name || "Steam"}
+        </div>
         <PanelSectionRow>
           <Dropdown
             focusable={true}
@@ -350,23 +361,24 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
               height: "2rem",
             }}
           >
-            <Button
+            <DialogButton
+              style={{ minWidth: "auto", width: "auto" }}
               disabled={disableState}
               onClick={() => {
                 setEraserMode(!eraserMode);
                 sketchCanvasRef?.eraseMode(!eraserMode);
               }}
             >
-              <span style={{ padding: "0.5rem" }}>
-                {eraserMode ? <FaPenFancy /> : <FaEraser color="red" />}
-              </span>
-            </Button>
-            <Button disabled={disableState} onClick={handleDeleteButtonClick}>
-              <span style={{ padding: "0.5rem" }}>
-                <FaTrash />
-                {deleteState ? "Tap to confirm" : undefined}
-              </span>
-            </Button>
+              {eraserMode ? <FaPenFancy /> : <FaEraser color="red" />}
+            </DialogButton>
+            <DialogButton
+              style={{ minWidth: "auto", width: "auto" }}
+              disabled={disableState}
+              onClick={handleDeleteButtonClick}
+            >
+              <FaTrash />
+              {deleteState ? "Tap to confirm" : undefined}
+            </DialogButton>
           </div>
           <ReactSketchCanvas
             ref={sketchCanvasRefCallback}
