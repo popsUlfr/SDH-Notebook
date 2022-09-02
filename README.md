@@ -4,7 +4,7 @@ A Steam Deck plugin for the [Decky Plugin Loader](https://github.com/SteamDeckHo
 
 Nothing beats the real life notebook and pencil to feel like a genuine detective but just in case you forgot yours at home, this may be the next best convenient option.
 
-![](assets/20220828124121_1.jpg)
+![](assets/20220902174609_1.jpg)
 
 The plugin stores a notebook per application with 8 pages by default, it will open the right one depending on the currently focused application. A default "Steam" notebook is also available when no application is running.
 
