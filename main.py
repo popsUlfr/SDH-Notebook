@@ -1,4 +1,7 @@
 import os
+import sys
+# append py_modules to PYTHONPATH
+sys.path.append(os.path.dirname(os.path.realpath(__file__))+"/py_modules")
 
 NOTES_SAVE_DIR = "/home/deck/homebrew/notebook"
 
@@ -15,6 +18,10 @@ already in the format that javascript 'Date()' expects.
 class Plugin:
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
+        pass
+
+    # Function called first during the unload process, utilize this to handle your plugin being removed
+    async def _unload(self):
         pass
 
     async def loadPage(self, appid: int, page: int) -> {'page': int, 'timestamp': int, 'empty': bool, 'data': str}:
