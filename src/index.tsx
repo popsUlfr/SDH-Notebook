@@ -10,6 +10,7 @@ import {
   SingleDropdownOption,
   AppOverview,
   DropdownOption,
+  Marquee,
 } from "decky-frontend-lib";
 import { VFC, useState, useEffect } from "react";
 import { FaBookOpen, FaPenFancy, FaEraser, FaTrash } from "react-icons/fa";
@@ -331,17 +332,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
       }}
     >
       <PanelSection>
-        <div
-          className={staticClasses.PanelSectionTitle}
-          style={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            display: "block",
-          }}
-        >
-          {runningApp?.display_name || "Steam"}
-        </div>
+        <Marquee>{runningApp?.display_name || "Steam"}</Marquee>
         <PanelSectionRow>
           <Dropdown
             focusable={true}
