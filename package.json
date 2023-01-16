@@ -34,21 +34,21 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
-    "@rollup/plugin-typescript": "^8.4.0",
-    "@types/lodash": "^4.14.184",
+    "@rollup/plugin-typescript": "^8.5.0",
+    "@types/lodash": "^4.14.191",
     "@types/react": "16.14.0",
     "@types/react-timeago": "^4.1.3",
     "@types/webpack": "^5.28.0",
-    "rollup": "^2.79.0",
+    "rollup": "^2.79.1",
     "rollup-plugin-import-assets": "^1.1.1",
     "shx": "^0.3.4",
-    "tslib": "^2.4.0",
-    "typescript": "^4.8.2"
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
   },
   "dependencies": {
-    "decky-frontend-lib": "^1.8.2",
+    "decky-frontend-lib": "^3.18.9",
     "lodash": "^4.17.21",
-    "react-icons": "^4.4.0",
+    "react-icons": "^4.7.1",
     "react-sketch-canvas": "^6.2.0",
     "react-timeago": "^7.1.0"
   },
