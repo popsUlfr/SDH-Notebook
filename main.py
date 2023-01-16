@@ -3,7 +3,10 @@ import sys
 # append py_modules to PYTHONPATH
 sys.path.append(os.path.dirname(os.path.realpath(__file__))+"/py_modules")
 
-NOTES_SAVE_DIR = "/home/deck/homebrew/notebook"
+import pathlib
+
+HOMEBREW_DIR = str(pathlib.Path(__file__).parents[2])
+NOTES_SAVE_DIR = f"{HOMEBREW_DIR}/notebook"
 
 """
 Under the NOTES_SAVE_DIR, notebook pages will be stored under the games' appids.
