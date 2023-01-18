@@ -220,7 +220,8 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
         return f().finally(() => setDisableState(false));
       }
     ),
-    config.RefreshWait
+    config.RefreshWait,
+    { leading: true, trailing: false }
   );
 
   // called when the ref is ready
@@ -267,7 +268,8 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
         return f(d).finally(() => setDisableState(false));
       }
     ),
-    config.DropdownChangeEventWait
+    config.DropdownChangeEventWait,
+    { leading: true, trailing: false }
   );
 
   let deleteStateTimer: NodeJS.Timeout;
@@ -301,7 +303,8 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({ serverAPI }) => {
         return f(e).finally(() => setDisableState(false));
       }
     ),
-    config.DeleteButtonClickWait
+    config.DeleteButtonClickWait,
+    { leading: true, trailing: false }
   );
 
   // debounced canvas stroke saves the scribble on-the-fly to disk

@@ -25,13 +25,10 @@ export function setServerAPI(s: ServerAPI) {
   serverAPI = s;
 }
 
-export async function loadPage(appid: number, page: number): Promise<Page> {
+async function backend_call<I, O>(name: string, params: I): Promise<O> {
   try {
     const res = await withTimeout(
-      serverAPI!.callPluginMethod<{ appid: number; page: number }, Page>(
-        "loadPage",
-        { appid, page }
-      )
+      serverAPI!.callPluginMethod<I, O>(name, params)
     );
     if (res.success) return res.result;
     else {
@@ -42,6 +39,13 @@ export async function loadPage(appid: number, page: number): Promise<Page> {
     console.error(e);
     throw e;
   }
+}
+
+export async function loadPage(appid: number, page: number): Promise<Page> {
+  return backend_call<{ appid: number; page: number }, Page>("loadPage", {
+    appid,
+    page,
+  });
 }
 
 export async function savePage(
@@ -49,101 +53,38 @@ export async function savePage(
   page: number,
   data: string
 ): Promise<{ timestamp: number }> {
-  try {
-    const res = await withTimeout(
-      serverAPI!.callPluginMethod<
-        { appid: number; page: number; data: string },
-        { timestamp: number }
-      >("savePage", { appid, page, data })
-    );
-    if (res.success) return res.result;
-    else {
-      console.error(res.result);
-      throw res.result;
-    }
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+  return backend_call<
+    { appid: number; page: number; data: string },
+    { timestamp: number }
+  >("savePage", { appid, page, data });
 }
 
 export async function deletePage(
   appid: number,
   page: number
 ): Promise<boolean> {
-  try {
-    const res = await withTimeout(
-      serverAPI!.callPluginMethod<{ appid: number; page: number }, boolean>(
-        "deletePage",
-        { appid, page }
-      )
-    );
-    if (res.success) return res.result;
-    else {
-      console.error(res.result);
-      throw res.result;
-    }
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+  return backend_call<{ appid: number; page: number }, boolean>("deletePage", {
+    appid,
+    page,
+  });
 }
 
 export async function saveLastSelectedPage(
   appid: number,
   page: number
 ): Promise<boolean> {
-  try {
-    const res = await withTimeout(
-      serverAPI!.callPluginMethod<{ appid: number; page: number }, boolean>(
-        "saveLastSelectedPage",
-        { appid, page }
-      )
-    );
-    if (res.success) return res.result;
-    else {
-      console.error(res.result);
-      throw res.result;
-    }
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+  return backend_call<{ appid: number; page: number }, boolean>(
+    "saveLastSelectedPage",
+    { appid, page }
+  );
 }
 
 export async function loadLastSelectedPage(appid: number): Promise<number> {
-  try {
-    const res = await withTimeout(
-      serverAPI!.callPluginMethod<{ appid: number }, number>(
-        "loadLastSelectedPage",
-        { appid }
-      )
-    );
-    if (res.success) return res.result;
-    else {
-      console.error(res.result);
-      throw res.result;
-    }
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+  return backend_call<{ appid: number }, number>("loadLastSelectedPage", {
+    appid,
+  });
 }
 
 export async function listPages(appid: number): Promise<Page[]> {
-  try {
-    const res = await withTimeout(
-      serverAPI!.callPluginMethod<{ appid: number }, Page[]>("listPages", {
-        appid,
-      })
-    );
-    if (res.success) return res.result;
-    else {
-      console.error(res.result);
-      throw res.result;
-    }
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+  return backend_call<{ appid: number }, Page[]>("listPages", { appid });
 }
