@@ -3,7 +3,6 @@
   "version": "0.1.2",
   "description": "Quickly scribble down important codes or notes during your play sessions.",
   "scripts": {
-    "prepare": "touch requirements.txt && pip3 install --upgrade -r requirements.txt -t py_modules",
     "build": "shx rm -rf dist && rollup -c",
     "watch": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -47,7 +46,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "decky-frontend-lib": "^3.18.9",
+    "decky-frontend-lib": "^3.18.10",
     "lodash": "^4.17.21",
     "react-icons": "^4.7.1",
     "react-sketch-canvas": "^6.2.0",
