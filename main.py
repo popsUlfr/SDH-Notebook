@@ -1,15 +1,10 @@
 import os
-import sys
-# append py_modules to PYTHONPATH
-sys.path.append(os.path.dirname(os.path.realpath(__file__))+"/py_modules")
+from typing import TypedDict
 
-import pathlib
-
-HOMEBREW_DIR = str(pathlib.Path(__file__).parents[2])
-NOTES_SAVE_DIR = f"{HOMEBREW_DIR}/notebook"
+import decky_plugin
 
 """
-Under the NOTES_SAVE_DIR, notebook pages will be stored under the games' appids.
+Notebook pages will be stored under the games' appids.
 Each page stored as json encoded CanvasPath[] named by their ids (e.g.: '0.json')
 
 Additonally each game has a 'page' file storing the last selected page index.
@@ -17,6 +12,10 @@ Additonally each game has a 'page' file storing the last selected page index.
 The timestamp attribute is the file's modification time multiplied by 1000 so that it's
 already in the format that javascript 'Date()' expects.
 """
+
+Page = TypedDict('Page', {'page': int, 'timestamp': int, 'empty': bool, 'data': str})
+Timestamp = TypedDict('Timestamp', {'timestamp': int})
+PageMetadata = TypedDict('PageMetadata', {'page': int, 'timestamp': int, 'empty': bool})
 
 class Plugin:
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
@@ -27,8 +26,12 @@ class Plugin:
     async def _unload(self):
         pass
 
-    async def loadPage(self, appid: int, page: int) -> {'page': int, 'timestamp': int, 'empty': bool, 'data': str}:
-        pagePath = f"{NOTES_SAVE_DIR}/{appid}/{page}.json"
+    # Migrations that should be performed before entering `_main()`.
+    async def _migration(self):
+        decky_plugin.migrate_settings(os.path.join(decky_plugin.DECKY_HOME, "notebook"))
+
+    async def loadPage(self, appid: int, page: int) -> Page:
+        pagePath = os.path.join(decky_plugin.DECKY_PLUGIN_SETTINGS_DIR, str(appid), f"{page}.json")
         ret = {'page': page, 'timestamp': 0, 'empty': True, 'data': ""}
         try:
             ret['timestamp'] = int(os.path.getmtime(pagePath)*1000)
@@ -41,8 +44,8 @@ class Plugin:
             pass
         return ret
 
-    async def savePage(self, appid: int, page: int, data: str) -> {'timestamp': int}:
-        pagePath = f"{NOTES_SAVE_DIR}/{appid}/{page}.json"
+    async def savePage(self, appid: int, page: int, data: str) -> Timestamp:
+        pagePath = os.path.join(decky_plugin.DECKY_PLUGIN_SETTINGS_DIR, str(appid), f"{page}.json")
         ret = {'timestamp': 0}
         pageDir = os.path.dirname(pagePath)
         try:
@@ -57,7 +60,7 @@ class Plugin:
         return ret
 
     async def deletePage(self, appid: int, page: int) -> bool:
-        pagePath = f"{NOTES_SAVE_DIR}/{appid}/{page}.json"
+        pagePath = os.path.join(decky_plugin.DECKY_PLUGIN_SETTINGS_DIR, str(appid), f"{page}.json")
         try:
             os.unlink(pagePath)
         except FileNotFoundError as err:
@@ -67,7 +70,7 @@ class Plugin:
         return True
 
     async def saveLastSelectedPage(self, appid: int, page: int) -> bool:
-        lastSelectedPagePath = f"{NOTES_SAVE_DIR}/{appid}/page"
+        lastSelectedPagePath = os.path.join(decky_plugin.DECKY_PLUGIN_SETTINGS_DIR, str(appid), "page")
         lastSelectedPageDir = os.path.dirname(lastSelectedPagePath)
         try:
             os.makedirs(lastSelectedPageDir, exist_ok=True)
@@ -80,7 +83,7 @@ class Plugin:
         return True
 
     async def loadLastSelectedPage(self, appid: int) -> int:
-        lastSelectedPagePath = f"{NOTES_SAVE_DIR}/{appid}/page"
+        lastSelectedPagePath = os.path.join(decky_plugin.DECKY_PLUGIN_SETTINGS_DIR, str(appid), "page")
         try:
             with open(lastSelectedPagePath, "r") as f:
                 return int(f.read().strip())
@@ -92,9 +95,8 @@ class Plugin:
             pass
         return 0
 
-    async def listPages(self, appid: int) -> [{'page': int, 'timestamp': int, 'empty': bool}]:
-        pagesPath = f"{NOTES_SAVE_DIR}/{appid}"
-        lastSelectedPagePath = f"{NOTES_SAVE_DIR}/{appid}/page"
+    async def listPages(self, appid: int) -> list[PageMetadata]:
+        pagesPath = os.path.join(decky_plugin.DECKY_PLUGIN_SETTINGS_DIR, str(appid))
         pages = []
         try:
             with os.scandir(pagesPath) as it:
