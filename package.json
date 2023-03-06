@@ -1,6 +1,6 @@
 {
   "name": "sdh-notebook",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Quickly scribble down important codes or notes during your play sessions.",
   "scripts": {
     "build": "shx rm -rf dist && rollup -c",
